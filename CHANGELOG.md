@@ -3,9 +3,13 @@ sensu_wrapper CHANGELOG
 
 This file is used to list changes made in each version of the sensu_wrapper cookbook.
 
+0.1.1
+-----
+- Dmitry Mozzherin - added ponymailer plugin file
+
 0.1.0
 -----
-- [your_name] - Initial release of sensu_wrapper
+- Patrick Leary - Initial release of sensu_wrapper
 
 - - -
 Check the [Markdown Syntax Guide](http://daringfireball.net/projects/markdown/syntax) for help with Markdown.
