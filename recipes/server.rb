@@ -41,7 +41,7 @@ node.default['postfix']['main']['smtpd_use_tls'] = postfix_defaults['smtpd_use_t
 include_recipe 'postfix::server'
 include_recipe 'monitor::master'
 graphite_host = search(:node, 'recipes:graphite\:\:default')
-unless graphite_host.empty? || graphite_host.blank?
+unless (graphite_host.respond_to?(:empty?) ? graphite_host.empty? : !graphite_host)
   # this recipe requires that a node exists with recipe graphite (like eol-cookbook::graphite_server)
   include_recipe 'monitor::_graphite_handler'
 end
