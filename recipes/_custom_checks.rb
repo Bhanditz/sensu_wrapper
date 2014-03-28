@@ -32,3 +32,13 @@ sensu_check 'check-disk' do
   subscribers ['all']
   interval 30
 end
+
+sensu_check 'check-replication-status' do
+  # NOTE - the user/pass here (which I realize is in the open) ONLY has access to this ONE command. Later we can make this more secure by using a data_bag
+  # to store the credentials, but for now, there's very little security risk anyway:
+  # TODO - That said, the host really should be from a data_bag.  :\
+  command '/etc/sensu/plugins/mysql-replication-status.rb --host=eol-reg-mast1.core.cli.mbl.edu --username=sensu --password=1statusOnly'
+  handlers ['ponymailer']
+  subscribers ['sensu_reg_master_lag_checker']
+  interval 60
+end
