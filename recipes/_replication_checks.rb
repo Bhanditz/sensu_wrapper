@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: sensu_wrapper
-# Recipe:: _custom_checks
+# Recipe:: _replication_checks
 #
 # Copyright 2014, Woods Hole Marine Biological Laboratory
 #
@@ -17,8 +17,10 @@
 # limitations under the License.
 #
 
+sensu_gem 'mysql'
+sensu_gem 'mysql2'
+
 %w[
-  check-disk
   mysql-replication-status
 ].each do |default_plugin|
   cookbook_file "/etc/sensu/plugins/#{default_plugin}.rb" do
@@ -27,9 +29,13 @@
   end
 end
 
-sensu_check 'check-disk' do
-  command 'check-disk.rb'
-  handlers ['ponymailer']
-  subscribers ['all']
-  interval 30
+# NOTE - Yes, we are currently locked into have a data bag for this to work.
+config = data_bag_item("reg_master", "config") rescue {}
+if config && config['host']
+  sensu_check 'check-replication-status' do
+    command "/etc/sensu/plugins/mysql-replication-status.rb --host=#{config['host']} --username=#{config['username']} --password=#{config['password']}"
+    handlers ['ponymailer']
+    subscribers ['sensu_reg_master_lag_checker']
+    interval 60
+  end
 end
