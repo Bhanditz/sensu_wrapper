@@ -18,7 +18,6 @@
 #
 
 sensu_gem 'mysql'
-sensu_gem 'mysql2'
 
 %w[
   mysql-replication-status
@@ -26,16 +25,5 @@ sensu_gem 'mysql2'
   cookbook_file "/etc/sensu/plugins/#{default_plugin}.rb" do
     source "plugins/#{default_plugin}.rb"
     mode 0755
-  end
-end
-
-# NOTE - Yes, we are currently locked into have a data bag for this to work.
-config = data_bag_item("reg_master", "config") rescue {}
-if config && config['host']
-  sensu_check 'check-replication-status' do
-    command "/etc/sensu/plugins/mysql-replication-status.rb --host=#{config['host']} --username=#{config['username']} --password=#{config['password']}"
-    handlers ['ponymailer']
-    subscribers ['sensu_reg_master_lag_checker']
-    interval 60
   end
 end

@@ -19,7 +19,6 @@
 
 %w[
   check-disk
-  mysql-replication-status
 ].each do |default_plugin|
   cookbook_file "/etc/sensu/plugins/#{default_plugin}.rb" do
     source "plugins/#{default_plugin}.rb"
