@@ -18,5 +18,6 @@
 #
 
 include_recipe 'monitor'
-include_recipe 'sensu_wrapper::_custom_handlers'
-include_recipe 'sensu_wrapper::_custom_checks'
+include_recipe 'sensu_wrapper::_ponymailer_handler'
+include_recipe 'sensu_wrapper::_check_disk'
+include_recipe 'sensu_wrapper::_hipchat_handler'

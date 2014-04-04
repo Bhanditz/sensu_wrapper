@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: sensu_wrapper
-# Recipe:: custom_handlers
+# Recipe:: _ponymailer_handler
 #
 # Copyright 2014, Woods Hole Marine Biological Laboratory
 #
@@ -17,16 +17,12 @@
 # limitations under the License.
 #
 
-%w[
-  ponymailer.rb
-].each do |handler|
-  cookbook_file "/etc/sensu/handlers/#{handler}" do
-    source "handlers/#{handler}"
-    mode 0755
-  end
-end
-
 sensu_gem 'pony'
+
+cookbook_file "/etc/sensu/handlers/ponymailer.rb" do
+  source "handlers/ponymailer.rb"
+  mode 0755
+end
 
 sensu_handler 'ponymailer' do
   type 'pipe'

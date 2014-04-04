@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: sensu_wrapper
-# Recipe:: _replication_plugin
+# Recipe:: _check_disk
 #
 # Copyright 2014, Woods Hole Marine Biological Laboratory
 #
@@ -17,9 +17,14 @@
 # limitations under the License.
 #
 
-sensu_gem 'mysql'
-
-cookbook_file "/etc/sensu/plugins/mysql-replication-status.rb" do
-  source "plugins/mysql-replication-status.rb"
+cookbook_file "/etc/sensu/plugins/check-disk.rb" do
+  source "plugins/check-disk.rb"
   mode 0755
+end
+
+sensu_check 'check-disk' do
+  command 'check-disk.rb'
+  handlers ['ponymailer']
+  subscribers ['all']
+  interval 30
 end

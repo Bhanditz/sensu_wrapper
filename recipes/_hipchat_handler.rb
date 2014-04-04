@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: sensu_wrapper
-# Recipe:: _custom_checks
+# Recipe:: _hipchat_handler
 #
 # Copyright 2014, Woods Hole Marine Biological Laboratory
 #
@@ -17,18 +17,23 @@
 # limitations under the License.
 #
 
-%w[
-  check-disk
-].each do |default_plugin|
-  cookbook_file "/etc/sensu/plugins/#{default_plugin}.rb" do
-    source "plugins/#{default_plugin}.rb"
+custom_defaults = data_bag_item('custom_defaults', 'config') rescue {}
+monitor_config = custom_defaults['monitor']
+
+if monitor_config && monitor_config['hipchat_api_key']
+  sensu_gem 'hipchat'
+
+  cookbook_file '/etc/sensu/handlers/hipchat.rb' do
+    source 'handlers/hipchat.rb'
     mode 0755
   end
-end
 
-sensu_check 'check-disk' do
-  command 'check-disk.rb'
-  handlers ['ponymailer']
-  subscribers ['all']
-  interval 30
+  sensu_snippet 'hipchat' do
+    content(:apikey => monitor_config['hipchat_api_key'], :room => monitor_config['hipchat_room'])
+  end
+
+  sensu_handler 'hipchat' do
+    type 'pipe'
+    command 'hipchat.rb'
+  end
 end

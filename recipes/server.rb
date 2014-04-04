@@ -45,5 +45,6 @@ unless (graphite_host.respond_to?(:empty?) ? graphite_host.empty? : !graphite_ho
   # this recipe requires that a node exists with recipe graphite (like eol-cookbook::graphite_server)
   include_recipe 'monitor::_graphite_handler'
 end
-include_recipe 'sensu_wrapper::_custom_handlers'
-include_recipe 'sensu_wrapper::_custom_checks'
+include_recipe 'sensu_wrapper::_ponymailer_handler'
+include_recipe 'sensu_wrapper::_check_disk'
+include_recipe 'sensu_wrapper::_hipchat_handler'
