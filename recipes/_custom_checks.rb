@@ -17,6 +17,9 @@
 # limitations under the License.
 #
 
+sensu_gem 'mysql'
+sensu_gem 'mysql2'
+
 %w[
   check-disk
   mysql-replication-status
@@ -35,10 +38,12 @@ sensu_check 'check-disk' do
 end
 
 # NOTE - Yes, we are currently locked into have a data bag for this to work.
-sensu_check 'check-replication-status' do
-  config = data_bag_item("reg_master", "config")
-  command "/etc/sensu/plugins/mysql-replication-status.rb --host=#{config['host']} --username=#{config['username']} --password=#{config['password']}"
-  handlers ['ponymailer']
-  subscribers ['sensu_reg_master_lag_checker']
-  interval 60
+config = data_bag_item("reg_master", "config") rescue {}
+if config && config['host']
+  sensu_check 'check-replication-status' do
+    command "/etc/sensu/plugins/mysql-replication-status.rb --host=#{config['host']} --username=#{config['username']} --password=#{config['password']}"
+    handlers ['ponymailer']
+    subscribers ['sensu_reg_master_lag_checker']
+    interval 60
+  end
 end
