@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: sensu_wrapper
-# Recipe:: _mem_pcnt_plugin.rb
+# Recipe:: _mem_pcnt_plugin.sh
 #
 # Copyright 2014, Woods Hole Marine Biological Laboratory
 #
@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-cookbook_file "/etc/sensu/plugins/check-mem-pcnt.rb" do
-  source "plugins/check-mem-pcnt.rb"
+cookbook_file "/etc/sensu/plugins/check-mem-pcnt.sh" do
+  source "plugins/check-mem-pcnt.sh"
   mode 0755
 end
