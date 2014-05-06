@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: sensu_wrapper
-# Recipe:: _mem_pcnt_plugin.sh
+# Recipe:: _mem_pcnt_plugin.rb
 #
 # Copyright 2014, Woods Hole Marine Biological Laboratory
 #
